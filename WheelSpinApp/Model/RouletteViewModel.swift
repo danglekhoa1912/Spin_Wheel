@@ -5,10 +5,10 @@
 //  Created by Dang Khoa Dang Le on 26/01/2025.
 //
 
+import AVFoundation
 import Combine
 import Foundation
 import SwiftUI
-import AVFoundation
 
 class RouletteViewModel: ObservableObject {
     @Published var segmentCount = 1
@@ -23,7 +23,6 @@ class RouletteViewModel: ObservableObject {
     @Published var newColorName: String = ""
     @Published var isVisibleFireworks = false
 
-
     var selectedColor: Color = .blue
     var lastUsedColor: Color = .clear
     let availableColors: [Color] = [
@@ -31,9 +30,8 @@ class RouletteViewModel: ObservableObject {
     ]
     let totalSpinDuration: Double = 3
     var totalDurations: Double = 3500
-    
-    private var player: AVAudioPlayer?
 
+    private var player: AVAudioPlayer?
 
     func spinRoulette() {
         guard !isSpinning && !names[0].isEmpty else { return }
@@ -66,7 +64,7 @@ class RouletteViewModel: ObservableObject {
         }
 
     }
-    
+
     func addNewItems(items: [String]) {
         guard !items.isEmpty else { return }
         names.removeAll(where: { $0 == "" })
@@ -145,7 +143,7 @@ class RouletteViewModel: ObservableObject {
         }
         do {
             player = try AVAudioPlayer(contentsOf: soundURL)
-            
+
         } catch {
             print("Failed to load the sound: \(error)")
         }
