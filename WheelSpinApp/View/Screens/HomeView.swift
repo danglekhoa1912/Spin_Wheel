@@ -14,7 +14,7 @@ struct HomeView: View {
                 .fill(
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            .primary, .primary.opacity(0.6),
+                            Color.primary, Color.primary.opacity(0.6),
                         ]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 )
                 .frame(height: 180)
@@ -30,7 +30,7 @@ struct HomeView: View {
                             } label: {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(Color.secondary)
                                         .frame(minWidth: 0, maxWidth: .infinity)
 
                                     Text("Spin now")
@@ -42,7 +42,7 @@ struct HomeView: View {
                             }
                         }
                         Spacer()
-                        Image(name: .logo)
+                        Image(name: .logoApp)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 100, height: 100)
@@ -66,6 +66,10 @@ struct HomeView: View {
             Spacer()
         }
         .padding()
+        .background(
+            LinearGradient(colors: [Color(hex: "#8EC5FC"), Color(hex: "#E0C3FC")], startPoint: .bottomLeading, endPoint: .topTrailing)
+        )
+        .navigationBarHidden(true)
     }
 }
 

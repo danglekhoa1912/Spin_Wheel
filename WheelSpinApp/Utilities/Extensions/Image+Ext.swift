@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ImageName: String {
-    case logo
+    case logoApp
 }
 
 extension Image {

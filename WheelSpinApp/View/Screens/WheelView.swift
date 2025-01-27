@@ -10,121 +10,177 @@ import Vortex
 
 struct WheelView: View {
     @State var radius: CGFloat = 0.0
+    @State private var addNewItem: Bool = false
     @StateObject var vm = RouletteViewModel()
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack {
-            VStack(spacing: 10) {
-                Text("What to watch today?")
-                    .font(.title)
-                    .fontWeight(.bold)
-                Text("Spin the rulette by tapping")
-                    .font(.caption)
-                    .fontWeight(.light)
-            }
-            .padding(.bottom, 20)
-            
-            GeometryReader { geo in
-                ZStack {
-                    ForEach(0..<vm.segmentCount, id: \.self) { index in
-                        ZStack {
-                            Segment(
-                                startAngle: self.angleForSegment(index),
-                                endAngle: self.angleForSegment(index + 1)
-                            )
-                            .foregroundStyle(vm.colors[index % vm.names.count])
-                            .onAppear {
-                                let midX = geo.frame(in: .local).midX + 40
-                                let midY = geo.frame(in: .local).midY + 40
-                                radius = min(midX, midY)
-                            }
-                            Text(vm.names[index])
-                                .foregroundStyle(.white)
-                                .font(.headline)
-                                .rotationEffect(
-                                    angleForSegment(index + 1)
-                                        - Angle(degrees: 10)
-                                )
-                                .offset(
-                                    CGSize(
-                                        width: {
-                                            () -> Double in
-                                            let mean: Angle =
-                                                (angleForSegment(index)
-                                                    + angleForSegment(index + 1))
-                                                / 2
-                                            return radius * 0.5
-                                                * cos(mean.radians)
-                                        }(),
-                                        height: {
-                                            () -> Double in
-                                            let mean: Angle =
-                                                (angleForSegment(index)
-                                                    + angleForSegment(index + 1))
-                                                / 2
-                                            return radius * 0.5
-                                                * sin(mean.radians)
-                                        }()
-                                    )
-                                )
-                        }
-                        .frame(width: 300, height: 300)
-                        .rotationEffect(.degrees(vm.rotation))
-                    }
-                    Circle()
-                        .foregroundStyle(.white)
-                        .frame(width: 50, height: 50)
-
-                    Arrow()
-                        .foregroundStyle(.gray)
-                        .frame(width: 30, height: 30)
-                        .rotationEffect(.degrees(180))
-                        .offset(x: 150)
-                        .shadow(color: .gray, radius: 4, x: 2, y: 2)
-                }
-                .onTapGesture {
-                    print("Ce")
-                    vm.spinRoulette()
-                }
-            }
-            .frame(width: 300)
-
-            VStack(spacing: 10) {
+        ZStack(alignment: .bottomTrailing) {
+            VStack {
                 HStack {
-                    TextField("Enter Name", text: $vm.newColorName)
-                        .padding(.leading)
-                        .frame(height: 55)
-                        .background(.thinMaterial, in: .rect(cornerRadius: 12))
-
                     Button {
-                        vm.addNewItem()
+                        dismiss()
                     } label: {
-                        Text("Add")
-                            .bold()
-                            .frame(width: 80, height: 55)
-                            .background(
-                                .thinMaterial, in: .rect(cornerRadius: 12))
-
+                        CircleButton(iconName: "chevron.left")
                     }
-                    .tint(.primary)
+                    Spacer()
+                    Text("Spin")
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                    Button {
+
+                    } label: {
+                        CircleButton(iconName: "gearshape")
+                    }
                 }
 
-                Spacer()
+                //            VStack(spacing: 10) {
+                //                Text("What to watch today?")
+                //                    .font(.title)
+                //                    .fontWeight(.bold)
+                //                Text("Spin the rulette by tapping")
+                //                    .font(.caption)
+                //                    .fontWeight(.light)
+                //            }
+                //            .padding(.bottom, 20)
 
-                if vm.names.filter({ $0 != "" }).isEmpty == false {
-                    List {
-                        ForEach(vm.names, id: \.self) {
-                            name in
-                            Text(name)
+                GeometryReader { geo in
+                    ZStack {
+                        ForEach(0..<vm.segmentCount, id: \.self) { index in
+                            ZStack {
+                                Segment(
+                                    startAngle: self.angleForSegment(index),
+                                    endAngle: self.angleForSegment(index + 1)
+                                )
+                                .foregroundStyle(
+                                    vm.colors[index % vm.names.count]
+                                )
+                                .onAppear {
+                                    let midX = geo.frame(in: .local).midX + 40
+                                    let midY = geo.frame(in: .local).midY + 40
+                                    radius = min(midX, midY)
+                                }
+                                Text(vm.names[index])
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
+                                    .rotationEffect(
+                                        angleForSegment(index + 1)
+                                            - Angle(degrees: 10)
+                                    )
+                                    .offset(
+                                        CGSize(
+                                            width: {
+                                                () -> Double in
+                                                let mean: Angle =
+                                                    (angleForSegment(index)
+                                                        + angleForSegment(
+                                                            index + 1))
+                                                    / 2
+                                                return radius * 0.5
+                                                    * cos(mean.radians)
+                                            }(),
+                                            height: {
+                                                () -> Double in
+                                                let mean: Angle =
+                                                    (angleForSegment(index)
+                                                        + angleForSegment(
+                                                            index + 1))
+                                                    / 2
+                                                return radius * 0.5
+                                                    * sin(mean.radians)
+                                            }()
+                                        )
+                                    )
+                            }
+                            .frame(width: 300, height: 300)
+                            .rotationEffect(.degrees(vm.rotation))
                         }
-                        .onDelete(perform: vm.deleteItem)
+                        Circle()
+                            .foregroundStyle(.white)
+                            .frame(width: 50, height: 50)
+
+                        Arrow()
+                            .foregroundStyle(.gray)
+                            .frame(width: 30, height: 30)
+                            .rotationEffect(.degrees(180))
+                            .offset(x: 150)
+                            .shadow(color: .gray, radius: 4, x: 2, y: 2)
                     }
-                    .listStyle(.grouped)
-                    .scrollContentBackground(.hidden)
+                    .onTapGesture {
+                        print("Ce")
+                        vm.spinRoulette()
+                    }
+                }
+                .frame(width: 300)
+
+                VStack(spacing: 10) {
+                    //                HStack {
+                    //                    TextField("Enter Name", text: $vm.newColorName)
+                    //                        .padding(.leading)
+                    //                        .frame(height: 55)
+                    //                        .background(.thinMaterial, in: .rect(cornerRadius: 12))
+                    //
+                    //                    Button {
+                    //                        vm.addNewItem()
+                    //                    } label: {
+                    //                        Text("Add")
+                    //                            .bold()
+                    //                            .frame(width: 80, height: 55)
+                    //                            .background(
+                    //                                .thinMaterial, in: .rect(cornerRadius: 12))
+                    //
+                    //                    }
+                    //                    .tint(.primary)
+                    //                }
+
+                    Spacer()
+
+                    VStack {
+                        if vm.names.filter({ $0 != "" }).isEmpty == false {
+                            List {
+                                ForEach(vm.names, id: \.self) {
+                                    name in
+                                    Text(name)
+                                        .listRowBackground(
+                                            Color.gray.opacity(0.2))
+                                }
+                                .onDelete(perform: vm.deleteItem)
+                            }
+                            .listStyle(.grouped)
+                            .scrollContentBackground(.hidden)
+                            .contentMargins(.vertical, 0)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.gray.opacity(0.2))
+                    .cornerRadius(20)
+
                 }
             }
+            .padding(.horizontal, 10)
+
+            Button {
+                addNewItem.toggle()
+            } label: {
+                Image(systemName: "plus")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+                    .frame(width: 55, height: 55)
+                    .background(
+                        Color.primary.shadow(
+                            .drop(
+                                color: .black.opacity(0.25), radius: 5, x: 10,
+                                y: 10)), in: .circle)
+            }
+            .padding(15)
         }
-        .padding(.horizontal, 10)
+        .navigationBarHidden(true)
+        .background(
+            LinearGradient(
+                colors: [Color(hex: "#8EC5FC"), Color(hex: "#E0C3FC")],
+                startPoint: .bottomLeading, endPoint: .topTrailing)
+        )
         .overlay {
             if vm.showAlert {
                 Dialog(
@@ -152,7 +208,20 @@ struct WheelView: View {
                 }
             }
         }
-
+        .sheet(
+            isPresented: $addNewItem,
+            content: {
+                NewItemView(
+                    item: $vm.newColorName,
+                    onConfirm: {
+                        vm.addNewItem()
+                    }
+                )
+                .presentationDetents([.height(200)])
+                .interactiveDismissDisabled()
+                .presentationCornerRadius(30)
+                .presentationBackground(.white)
+            })
     }
 
     func angleForSegment(_ index: Int) -> Angle {
