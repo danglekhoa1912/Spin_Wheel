@@ -108,7 +108,6 @@ struct WheelView: View {
                             .shadow(color: .gray, radius: 4, x: 2, y: 2)
                     }
                     .onTapGesture {
-                        print("Ce")
                         vm.spinRoulette()
                     }
                 }

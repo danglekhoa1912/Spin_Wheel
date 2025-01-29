@@ -89,6 +89,7 @@ struct NewSpinWheelView: View {
             Spacer(minLength: 0)
 
             Button {
+                vm.createSpinWheel()
                 dismiss()
             } label: {
                 Text("Create Spin")
