@@ -29,4 +29,9 @@ class SpinWheelModel: ObservableObject {
     func deleteLabel(at offset: IndexSet) {
         labels.remove(atOffsets: offset)
     }
+    
+    func createSpinWheel() {
+        let result = SpinWheelsTable.shared.createSpinWheel(spinWheel: SpinWheel(title: title, labels: labels.map({$0.value})))
+        print(result)
+    }
 }

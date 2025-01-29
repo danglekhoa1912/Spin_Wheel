@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var showCreateSpinWheel = false
+    @StateObject var vm = HomeViewModel()
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 30) {
@@ -70,55 +71,81 @@ struct HomeView: View {
                         }
                     }
 
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.white)
-                        .frame(height: 100)
-                        .shadow(radius: 6)
-                        .overlay {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    Text("What to eat ?")
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
-                                    Text("Spins: 2")
-                                        .font(.caption)
-                                        .fontWeight(.thin)
-                                }
+                    List {
+                        ForEach(vm.spinWheelList) { item in
+                            Button {
+                                
+                            } label: {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(.white)
+                                    .frame(height: 100)
+                                    .shadow(radius: 2)
+                                    .listRowSeparator(.hidden)
+                                    .overlay {
+                                        HStack {
+                                            VStack(
+                                                alignment: .leading, spacing: 10
+                                            ) {
+                                                Text(item.title)
+                                                    .font(.title3)
+                                                    .fontWeight(.semibold)
+                                                Text("Spins: \(item.labels.count)")
+                                                    .font(.caption)
+                                                    .fontWeight(.thin)
+                                            }
 
-                                Spacer()
+                                            Spacer()
 
-                                Menu {
+                                            Menu {
 
-                                    Button(action: {}) {
-                                        SwiftUI.Label(
-                                            "Edit",
-                                            systemImage:
-                                                "square.and.pencil")
+                                                Button(action: {}) {
+                                                    SwiftUI.Label(
+                                                        "Edit",
+                                                        systemImage:
+                                                            "square.and.pencil")
+                                                }
+
+                                                Button(action: {}) {
+                                                    SwiftUI.Label(
+                                                        "Share",
+                                                        systemImage:
+                                                            "arrowshape.turn.up.right.fill"
+                                                    )
+                                                }
+
+                                                Button(
+                                                    role: .destructive,
+                                                    action: {}
+                                                ) {
+                                                    SwiftUI.Label(
+                                                        "Delete",
+                                                        systemImage: "trash")
+                                                }
+
+                                            } label: {
+                                                Image(
+                                                    systemName:
+                                                        "ellipsis.circle"
+                                                )
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 20, height: 20)
+                                                .tint(.black)
+                                            }
+
+                                        }
+                                        .hSpacing(.leading)
+                                        .padding()
                                     }
-
-                                    Button(action: {}) {
-                                        SwiftUI.Label(
-                                            "Share",
-                                            systemImage: "arrowshape.turn.up.right.fill")
-                                    }
-
-                                    Button(role: .destructive, action: {}) {
-                                        SwiftUI.Label(
-                                            "Delete", systemImage: "trash")
-                                    }
-
-                                } label: {
-                                    Image(systemName: "ellipsis.circle")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 20, height: 20)
-                                        .tint(.black)
-                                }
-
                             }
-                            .hSpacing(.leading)
-                            .padding()
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
                         }
+                    }
+                    .listRowSpacing(10)
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .contentMargins(.all, 0)
 
                 }
                 Spacer()
@@ -152,7 +179,13 @@ struct HomeView: View {
                     .interactiveDismissDisabled()
                     .presentationCornerRadius(30)
                     .presentationBackground(.white)
-            })
+            }
+        )
+        .onAppear {
+            Task {
+                await vm.loadData()
+            }
+        }
     }
 }
 
