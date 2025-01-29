@@ -16,22 +16,23 @@ class SpinWheelModel: ObservableObject {
     @Published var labels: [Label] = []
     @Published var title: String = ""
     @Published var newLabel: String = ""
-    
+
     var isValid: Bool {
         return !title.isEmpty && !labels.isEmpty
     }
-    
+
     func addNewLabel() {
         labels.append(Label(value: newLabel))
         newLabel = ""
     }
-    
+
     func deleteLabel(at offset: IndexSet) {
         labels.remove(atOffsets: offset)
     }
-    
+
     func createSpinWheel() {
-        let result = SpinWheelsTable.shared.createSpinWheel(spinWheel: SpinWheel(title: title, labels: labels.map({$0.value})))
+        let result = SpinWheelsTable.shared.createSpinWheel(
+            spinWheel: SpinWheel(title: title, labels: labels.map({ $0.value })))
         print(result)
     }
 }
