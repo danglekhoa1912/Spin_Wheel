@@ -1,0 +1,30 @@
+name: Deploy to App Store
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.0"
+
+      - name: Install Fastlane
+        run: gem install fastlane -NV
+
+      - name: Deploy with Fastlane
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Nếu dùng Match
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }} # URL repo chứa Match
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
+        run: fastlane ios deploy
