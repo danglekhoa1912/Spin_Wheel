@@ -14,7 +14,6 @@ struct WheelView: View {
     @StateObject var vm = RouletteViewModel()
     @Environment(\.dismiss) private var dismiss
     @State var spinWheel: SpinWheel? = nil
-    
     let spinWheelId: String?
 
     var body: some View {
@@ -223,11 +222,12 @@ struct WheelView: View {
                 .interactiveDismissDisabled()
                 .presentationCornerRadius(30)
                 .presentationBackground(.white)
-            })
+            }
+        )
         .onAppear {
             Task {
                 if spinWheelId != nil {
-                    spinWheel =  await SpinWheelsTable.shared.getSpinWheelDetail(id: spinWheelId!)
+                    spinWheel = await SpinWheelsTable.shared.getSpinWheelDetail(id: spinWheelId!)
                     if spinWheel != nil {
                         vm.addNewItems(items: spinWheel!.labels)
                     }
