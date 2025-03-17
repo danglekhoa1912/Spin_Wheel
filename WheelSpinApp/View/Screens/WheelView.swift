@@ -14,7 +14,6 @@ struct WheelView: View {
     @StateObject var vm = RouletteViewModel()
     @Environment(\.dismiss) private var dismiss
     @State var spinWheel: SpinWheel? = nil
-
     let spinWheelId: String?
 
     var body: some View {
