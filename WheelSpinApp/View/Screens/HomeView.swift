@@ -30,7 +30,7 @@ struct HomeView: View {
                                     .bold()
                                     .foregroundColor(.white)
                                 NavigationLink {
-                                    WheelView()
+                                    WheelView(spinWheelId: nil)
                                 } label: {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 20)
@@ -73,9 +73,12 @@ struct HomeView: View {
 
                     List {
                         ForEach(vm.spinWheelList) { item in
-                            Button {
-                                
-                            } label: {
+                            ZStack {
+                                NavigationLink(
+                                    destination: WheelView(spinWheelId: item.id)
+                                ) {
+                                    EmptyView()
+                                }.opacity(0.0)
                                 RoundedRectangle(cornerRadius: 20)
                                     .fill(.white)
                                     .frame(height: 100)
@@ -89,9 +92,11 @@ struct HomeView: View {
                                                 Text(item.title)
                                                     .font(.title3)
                                                     .fontWeight(.semibold)
-                                                Text("Spins: \(item.labels.count)")
-                                                    .font(.caption)
-                                                    .fontWeight(.thin)
+                                                Text(
+                                                    "Spins: \(item.labels.count)"
+                                                )
+                                                .font(.caption)
+                                                .fontWeight(.thin)
                                             }
 
                                             Spacer()
@@ -138,9 +143,10 @@ struct HomeView: View {
                                         .padding()
                                     }
                             }
-                            .listRowInsets(EdgeInsets())
-                            .listRowBackground(Color.clear)
+
                         }
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
                     }
                     .listRowSpacing(10)
                     .listStyle(.plain)

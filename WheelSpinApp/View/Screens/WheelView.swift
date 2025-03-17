@@ -13,6 +13,9 @@ struct WheelView: View {
     @State private var addNewItem: Bool = false
     @StateObject var vm = RouletteViewModel()
     @Environment(\.dismiss) private var dismiss
+    @State var spinWheel: SpinWheel? = nil
+    
+    let spinWheelId: String?
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -24,7 +27,7 @@ struct WheelView: View {
                         CircleButton(iconName: "chevron.left")
                     }
                     Spacer()
-                    Text("Spin")
+                    Text(spinWheel?.title ?? "Spin")
                         .font(.title2)
                         .bold()
                     Spacer()
@@ -221,6 +224,16 @@ struct WheelView: View {
                 .presentationCornerRadius(30)
                 .presentationBackground(.white)
             })
+        .onAppear {
+            Task {
+                if spinWheelId != nil {
+                    spinWheel =  await SpinWheelsTable.shared.getSpinWheelDetail(id: spinWheelId!)
+                    if spinWheel != nil {
+                        vm.addNewItems(items: spinWheel!.labels)
+                    }
+                }
+            }
+        }
     }
 
     func angleForSegment(_ index: Int) -> Angle {
@@ -234,5 +247,5 @@ struct WheelView: View {
 }
 
 #Preview {
-    WheelView()
+    WheelView(spinWheelId: nil)
 }

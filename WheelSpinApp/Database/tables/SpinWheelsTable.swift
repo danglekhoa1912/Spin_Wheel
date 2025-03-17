@@ -97,4 +97,20 @@ class SpinWheelsTable {
 
         return spinWheelList
     }
+
+    func getSpinWheelDetail(id: String) async -> SpinWheel? {
+        do {
+            let query = spinWheelTable.filter(self.id == id)
+            if let item = try db.pluck(query) {
+                return SpinWheel(
+                    id: item[self.id],
+                    title: item[self.title],
+                    labels: item[self.labels]
+                )
+            }
+        } catch {
+            print("❌ Lỗi khi lấy dữ liệu từ SQLite: \(error)")
+        }
+        return nil
+    }
 }
