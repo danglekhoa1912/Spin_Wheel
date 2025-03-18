@@ -68,6 +68,5 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 fastlane/build/
 fastlane/.env
-fastlane/Matchfile
 
 build/
