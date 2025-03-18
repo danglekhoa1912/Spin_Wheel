@@ -16,9 +16,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
+          bundler-cache: true
 
-      - name: Install Fastlane
-        run: gem install fastlane -NV
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
 
       - name: Debug Authentication
         env:
@@ -37,4 +40,3 @@ jobs:
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }} # URL repo chứa Match
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
         run: fastlane ios deploy
-        
