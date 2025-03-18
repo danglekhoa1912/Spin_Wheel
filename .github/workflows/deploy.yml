@@ -18,6 +18,20 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
+      - name: Check Credentials
+        env:
+          FASTLANE_USER: ${{ secrets.APPLE_ID }}
+          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        run: |
+          echo "FASTLANE_USER: $FASTLANE_USER"
+          echo "FASTLANE_PASSWORD length: ${#FASTLANE_PASSWORD}"
+          if [ -z "$FASTLANE_PASSWORD" ]; then echo "Password is empty!"; fi
+      - name: Debug Authentication
+        env:
+          FASTLANE_USER: ${{ secrets.APPLE_ID }}
+          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        run: |
+          fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose || echo "Authentication failed"
       - name: Deploy with Fastlane
         env:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
