@@ -28,7 +28,9 @@ jobs:
         run: |
           echo "FASTLANE_USER: $FASTLANE_USER"
           echo "FASTLANE_PASSWORD length: ${#FASTLANE_PASSWORD}"
+          if [ -z "$FASTLANE_USER" ]; then echo "User is empty!"; fi
           if [ -z "$FASTLANE_PASSWORD" ]; then echo "Password is empty!"; fi
+          echo "FASTLANE_PASSWORD first char: ${FASTLANE_PASSWORD:0:1}" # In ký tự đầu (ẩn phần còn lại)
       - name: Debug Authentication
         env:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
