@@ -64,7 +64,7 @@ class RouletteViewModel: ObservableObject {
         }
 
     }
-    
+
     func addNewItems(items: [String]) {
         guard !items.isEmpty else { return }
         names.removeAll(where: { $0 == "" })
