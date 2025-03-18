@@ -1,42 +1,35 @@
-name: Deploy to App Store
-
+name: Deploy to TestFlight
 on:
   push:
     branches:
       - main
-
 jobs:
   build:
     runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
           bundler-cache: true
-
       - name: Install Dependencies
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
-
       - name: Debug Authentication
         env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          FASTLANE_USER: ${{ secrets.APPLE_ID }} # Thay APPLE_ID bằng FASTLANE_USER
+          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }} # Dùng FASTLANE_PASSWORD
         run: |
-          echo "APPLE_ID: $APPLE_ID"
-          echo "APPLE_PASSWORD: $APPLE_PASSWORD"
-          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose
-
+          echo "FASTLANE_USER: $FASTLANE_USER"
+          echo "FASTLANE_PASSWORD is set: ${FASTLANE_PASSWORD:+true}"
+          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose || echo "Authentication failed"
       - name: Deploy with Fastlane
         env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Nếu dùng Match
-          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }} # URL repo chứa Match
+          FASTLANE_USER: ${{ secrets.APPLE_ID }}
+          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
-        run: fastlane ios deploy
+        run: bundle exec fastlane ios deploy --verbose
