@@ -20,6 +20,15 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane -NV
 
+      - name: Debug Authentication
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        run: |
+          echo "APPLE_ID: $APPLE_ID"
+          echo "APPLE_PASSWORD: $APPLE_PASSWORD"
+          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose
+
       - name: Deploy with Fastlane
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -29,11 +38,3 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
         run: fastlane ios deploy
         
-      - name: Debug Authentication
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-        run: |
-          echo "APPLE_ID: $APPLE_ID"
-          echo "APPLE_PASSWORD: $APPLE_PASSWORD"
-          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose
