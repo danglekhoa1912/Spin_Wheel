@@ -26,7 +26,7 @@ jobs:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
           FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
-          echo "FASTLANE_USER: $FASTLANE_USER"
+          echo "FASTLANE_USER: ${#FASTLANE_USER}"
           echo "FASTLANE_PASSWORD length: ${#FASTLANE_PASSWORD}"
           if [ -z "$FASTLANE_USER" ]; then echo "User is empty!"; fi
           if [ -z "$FASTLANE_PASSWORD" ]; then echo "Password is empty!"; fi
