@@ -16,7 +16,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		844F83432D48092E00E1D223 /* Exceptions for "WheelSpinApp" folder in "WheelSpinApp" target */ = {
+		84C817EF2D89CD42008537A4 /* Exceptions for "WheelSpinApp" folder in "WheelSpinApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -29,7 +29,7 @@
 		84CA4B0F2D4632EB00ADC834 /* WheelSpinApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				844F83432D48092E00E1D223 /* Exceptions for "WheelSpinApp" folder in "WheelSpinApp" target */,
+				84C817EF2D89CD42008537A4 /* Exceptions for "WheelSpinApp" folder in "WheelSpinApp" target */,
 			);
 			path = WheelSpinApp;
 			sourceTree = "<group>";
