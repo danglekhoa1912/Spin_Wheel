@@ -18,18 +18,11 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
-      - name: Debug Authentication
-        env:
-          FASTLANE_USER: ${{ secrets.APPLE_ID }} # Thay APPLE_ID bằng FASTLANE_USER
-          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }} # Dùng FASTLANE_PASSWORD
-        run: |
-          echo "FASTLANE_USER: $FASTLANE_USER"
-          echo "FASTLANE_PASSWORD is set: ${FASTLANE_PASSWORD:+true}"
-          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose || echo "Authentication failed"
       - name: Deploy with Fastlane
         env:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
           FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
         run: bundle exec fastlane ios deploy --verbose
