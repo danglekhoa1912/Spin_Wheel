@@ -13,11 +13,14 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
-          bundler-cache: true
+          bundler-cache: true # Cache Bundler để tăng tốc
       - name: Install Dependencies
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
+      - name: Check Fastlane Installation
+        run: |
+          bundle exec fastlane --version # Xác nhận Fastlane
       - name: Check Credentials
         env:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
@@ -31,7 +34,7 @@ jobs:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
           FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
-          fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose || echo "Authentication failed"
+          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose || echo "Authentication failed"
       - name: Deploy with Fastlane
         env:
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
