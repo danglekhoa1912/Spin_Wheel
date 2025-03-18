@@ -64,26 +64,6 @@ class RouletteViewModel: ObservableObject {
         }
 
     }
-    
-    func addNewItems(items: [String]) {
-        guard !items.isEmpty else { return }
-        names.removeAll(where: { $0 == "" })
-        colors.removeAll(where: { $0 == .gray.opacity(0.3) })
-        for item in items {
-            addNewColorAndName(name: item)
-        }
-        segmentCount = names.count
-    }
-
-    func addNewItems(items: [String]) {
-        guard !items.isEmpty else { return }
-        names.removeAll(where: { $0 == "" })
-        colors.removeAll(where: { $0 == .gray.opacity(0.3) })
-        for item in items {
-            addNewColorAndName(name: item)
-        }
-        segmentCount = names.count
-    }
 
     func addNewItems(items: [String]) {
         guard !items.isEmpty else { return }
