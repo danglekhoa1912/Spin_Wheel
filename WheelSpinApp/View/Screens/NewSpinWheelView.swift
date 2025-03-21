@@ -16,6 +16,7 @@ struct NewSpinWheelView: View {
         VStack(alignment: .leading, spacing: 15) {
             ZStack {
                 Text("Add new spin wheel")
+                    .foregroundColor(.black)
                     .font(.title3)
                     .fontWeight(.medium)
                 Button {
@@ -34,9 +35,11 @@ struct NewSpinWheelView: View {
                     .foregroundStyle(.gray)
 
                 TextField("Enter your title", text: $vm.title)
+                    .foregroundColor(.black)
                     .padding(.leading)
                     .frame(height: 55)
                     .background(.thinMaterial, in: .rect(cornerRadius: 12))
+                    .environment(\.colorScheme, .light)
             }
             .padding(.top, 5)
 
@@ -47,9 +50,11 @@ struct NewSpinWheelView: View {
 
                 HStack {
                     TextField("Enter label", text: $vm.newLabel)
+                        .foregroundColor(.black)
                         .padding(.leading)
                         .frame(height: 55)
                         .background(.thinMaterial, in: .rect(cornerRadius: 12))
+                        .environment(\.colorScheme, .light)
 
                     Button {
                         vm.addNewLabel()
@@ -59,6 +64,7 @@ struct NewSpinWheelView: View {
                             .frame(width: 80, height: 55)
                             .background(
                                 .thinMaterial, in: .rect(cornerRadius: 12))
+                            .environment(\.colorScheme, .light)
 
                     }
                     .disabled(vm.newLabel.isEmpty)
@@ -70,6 +76,7 @@ struct NewSpinWheelView: View {
                         ForEach(vm.labels) {
                             label in
                             Text(label.value)
+                                .foregroundColor(.black)
                                 .listRowBackground(
                                     Color.gray.opacity(0.2))
                         }

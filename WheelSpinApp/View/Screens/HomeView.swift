@@ -90,11 +90,13 @@ struct HomeView: View {
                                                 alignment: .leading, spacing: 10
                                             ) {
                                                 Text(item.title)
+                                                    .foregroundColor(.black)
                                                     .font(.title3)
                                                     .fontWeight(.semibold)
                                                 Text(
                                                     "Spins: \(item.labels.count)"
                                                 )
+                                                .foregroundColor(.black)
                                                 .font(.caption)
                                                 .fontWeight(.thin)
                                             }
