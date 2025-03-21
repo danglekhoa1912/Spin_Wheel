@@ -43,11 +43,12 @@ platform :ios do
       scheme: "WheelSpinApp",
       export_method: "app-store",
       clean: true,
-      xcargs: "-allowProvisioningUpdates",
+      verbose: true,
       export_options: {
       provisioningProfiles: {
-        "khoadang.WheelSpinApp" => "match AppStore khoadang.WheelSpinApp" # Chỉ định profile từ match
-      }
+        "khoadang.WheelSpinApp" => "match AppStore khoadang.WheelSpinApp",
+      },
+      signingStyle: "manual",
     }
     )
 
