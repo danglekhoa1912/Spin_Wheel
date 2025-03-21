@@ -44,12 +44,6 @@ platform :ios do
       export_method: "app-store",
       clean: true,
       verbose: true,
-      export_options: {
-      provisioningProfiles: {
-        "khoadang.WheelSpinApp" => "match AppStore khoadang.WheelSpinApp",
-      },
-      signingStyle: "manual",
-    }
     )
 
     upload_to_app_store(
