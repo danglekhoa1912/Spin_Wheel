@@ -28,11 +28,13 @@ struct Dialog: View {
 
             VStack {
                 Text(title)
+                    .foregroundColor(.black)
                     .font(.title2)
                     .bold()
                     .padding()
 
                 Text(message)
+                    .foregroundColor(.black)
                     .font(.body)
 
                 HStack {
