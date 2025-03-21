@@ -18,6 +18,6 @@ team_id("FQ4L47BZFJ")
 api_key({
   key_id: ENV["KEY_ID"],
   issuer_id: ENV["ISSUER_ID"],
-  key_filepath: "./fastlane/AuthKey_45P36M8DM8.p8",
+  key: File.read("./fastlane/AuthKey_45P36M8DM8.p8"),
   in_house: false
 })
