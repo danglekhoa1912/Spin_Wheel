@@ -27,6 +27,7 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
         run: bundle exec fastlane match appstore
       - name: Debug Provisioning Profiles
         run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
