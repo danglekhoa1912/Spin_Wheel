@@ -18,6 +18,7 @@ struct NewItemView: View {
         VStack(alignment: .leading, spacing: 15) {
             ZStack {
                 Text("Add new item")
+                    .foregroundColor(.black)
                     .font(.title3)
                     .fontWeight(.medium)
                 Button {
@@ -33,6 +34,8 @@ struct NewItemView: View {
             VStack(alignment: .leading, spacing: 8) {
 
                 TextField("Enter Name!", text: $item)
+                    .foregroundColor(.black)
+                    .accentColor(.gray)
                     .padding(.vertical, 12)
                     .padding(.horizontal, 15)
                     .background(
