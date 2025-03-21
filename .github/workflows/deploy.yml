@@ -23,10 +23,8 @@ jobs:
       - name: Decode API Key
         run: |
           echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 -d > fastlane/AuthKey_45P36M8DM8.p8
-      - name: List Xcode Versions
-        run: ls -la /Applications/Xcode*
-      - name: Check Current Xcode Version
-        run: xcodebuild -version
+      - name: Debug Match
+        run: bundle exec fastlane match appstore --verbose
       - name: Deploy with Fastlane
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
