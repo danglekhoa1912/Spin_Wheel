@@ -70,3 +70,5 @@ fastlane/build/
 fastlane/.env
 
 build/
+
+*.p8

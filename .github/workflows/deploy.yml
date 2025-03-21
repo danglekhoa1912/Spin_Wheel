@@ -21,6 +21,9 @@ jobs:
       - name: Decode API Key
         run: |
           echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 -d > fastlane/AuthKey_45P36M8DM8.p8
+      - name: Debug File
+        run: |
+          ls -la fastlane/AuthKey_45P36M8DM8.p8 || echo "File not found"
       - name: Deploy with Fastlane
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
