@@ -18,27 +18,14 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
-      - name: Debug Secrets
-        env:
-          FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+      - name: Decode API Key
         run: |
-          echo "FASTLANE_USER: $FASTLANE_USER"
-          echo "FASTLANE_PASSWORD length: ${#FASTLANE_PASSWORD}"
-          echo "FASTLANE_SESSION length: ${#FASTLANE_SESSION}"
-      - name: Debug Authentication
-        env:
-          FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-        run: |
-          bundle exec fastlane run latest_testflight_build_number app_identifier:"khoadang.WheelSpinApp" --verbose || echo "Authentication failed"
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 -d > fastlane/AuthKey_45P36M8DM8.p8
       - name: Deploy with Fastlane
         env:
-          FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+          KEY_ID: ${{ secrets.KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
         run: bundle exec fastlane ios deploy --verbose
