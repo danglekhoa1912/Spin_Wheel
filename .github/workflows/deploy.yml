@@ -35,3 +35,6 @@ jobs:
           KEY_ID: ${{ secrets.KEY_ID }}
           ISSUER_ID: ${{ secrets.ISSUER_ID }}
         run: bundle exec fastlane ios deploy --verbose
+      - name: Archive Logs
+        if: failure()
+        run: cat /Users/runner/Library/Logs/gym/WheelSpinApp-WheelSpinApp.log
