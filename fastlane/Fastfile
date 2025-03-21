@@ -42,7 +42,8 @@ platform :ios do
     build_app(
       scheme: "WheelSpinApp",
       export_method: "app-store",
-      clean: true
+      clean: true,
+      xcargs: "-allowProvisioningUpdates"
     )
 
     upload_to_app_store(
