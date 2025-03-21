@@ -37,7 +37,9 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
           KEY_ID: ${{ secrets.KEY_ID }}
           ISSUER_ID: ${{ secrets.ISSUER_ID }}
-        run: bundle exec fastlane match appstore --verbose > match_log.txt 2>&1
+        run: |
+          bundle exec fastlane match nuke appstore
+          bundle exec fastlane match appstore --verbose > match_log.txt 2>&1
 
       - name: Show Match Log
         if: always() # Chạy cả khi thành công hoặc thất bại
