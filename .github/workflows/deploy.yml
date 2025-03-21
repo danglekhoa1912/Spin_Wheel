@@ -9,28 +9,36 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
           bundler-cache: true # Cache Bundler để tăng tốc
+
       - name: Install Dependencies
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
+
       - name: Select Xcode Version
         run: sudo xcode-select -s /Applications/Xcode_16.2.0.app
+
       - name: Decode API Key
         run: |
           echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 -d > fastlane/AuthKey_45P36M8DM8.p8
+          ls -la ./fastlane/AuthKey_45P36M8DM8.p8
+
       - name: Setup Match
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
         run: bundle exec fastlane match appstore
+
       - name: Debug Provisioning Profiles
         run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
+
       - name: Deploy with Fastlane
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -39,6 +47,7 @@ jobs:
           KEY_ID: ${{ secrets.KEY_ID }}
           ISSUER_ID: ${{ secrets.ISSUER_ID }}
         run: bundle exec fastlane ios deploy --verbose
+
       - name: Archive Logs
         if: failure()
         run: cat /Users/runner/Library/Logs/gym/WheelSpinApp-WheelSpinApp.log
