@@ -30,13 +30,6 @@ jobs:
           echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 -d > fastlane/AuthKey_45P36M8DM8.p8
           ls -la ./fastlane/AuthKey_45P36M8DM8.p8
 
-      - name: Reset Keychain
-        run: |
-          security delete-keychain build.keychain || true
-          security create-keychain -p "" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-
       - name: Setup Match
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
