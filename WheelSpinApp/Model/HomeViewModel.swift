@@ -8,12 +8,5 @@
 import Foundation
 
 class HomeViewModel: ObservableObject {
-    @Published var spinWheelList: [SpinWheel] = []
 
-    func loadData() async {
-        let data = await SpinWheelsTable.shared.getSpinWheels()
-        DispatchQueue.main.async {
-            self.spinWheelList = data
-        }
-    }
 }

@@ -148,9 +148,8 @@ struct WheelView: View {
                                 }
                                 .onDelete(perform: vm.deleteItem)
                             }
-                            .listStyle(.grouped)
-                            .scrollContentBackground(.hidden)
-                            .contentMargins(.vertical, 0)
+                            .listStyle(.plain)
+                            .modifier(ListBackgroundModifier())
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -165,14 +164,15 @@ struct WheelView: View {
                 addNewItem.toggle()
             } label: {
                 Image(systemName: "plus")
-                    .fontWeight(.semibold)
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 55, height: 55)
                     .background(
-                        Color.primary.shadow(
-                            .drop(
-                                color: .black.opacity(0.25), radius: 5, x: 10,
-                                y: 10)), in: .circle)
+                        Color.primary,
+                        in: .circle
+                    )
+                    .shadow(
+                        color: .black.opacity(0.25), radius: 5, x: 10, y: 10)
             }
             .padding(15)
         }
@@ -210,24 +210,27 @@ struct WheelView: View {
             }
         }
         .sheet(
-            isPresented: $addNewItem,
-            content: {
-                NewItemView(
-                    item: $vm.newColorName,
-                    onConfirm: {
-                        vm.addNewItem()
-                    }
-                )
-                .presentationDetents([.height(200)])
-                .interactiveDismissDisabled()
-                .presentationCornerRadius(30)
-                .presentationBackground(.white)
+            isPresented: $addNewItem
+        ) {
+            let newItemView = NewItemView(
+                item: $vm.newColorName,
+                onConfirm: { vm.addNewItem() }
+            )
+            if #available(iOS 16.4, *) {
+                newItemView
+                    .presentationDetents([.height(200)])
+                    .interactiveDismissDisabled()
+                    .presentationCornerRadius(30)
+                    .presentationBackground(.white)
+            } else {
+                newItemView
             }
-        )
+        }
         .onAppear {
             Task {
                 if spinWheelId != nil {
-                    spinWheel = await SpinWheelsTable.shared.getSpinWheelDetail(id: spinWheelId!)
+                    spinWheel = await SpinWheelsTable.shared.getSpinWheelDetail(
+                        id: spinWheelId!)
                     if spinWheel != nil {
                         vm.addNewItems(items: spinWheel!.labels)
                     }

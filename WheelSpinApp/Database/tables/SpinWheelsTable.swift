@@ -41,11 +41,13 @@ struct SpinWheel: Identifiable {
     }
 }
 
-class SpinWheelsTable {
+class SpinWheelsTable: ObservableObject {
     static let shared = SpinWheelsTable(db: DatabaseManager.shared.getDB())
     let device = UIDevice.current
 
     private var db: Connection
+
+    @Published var spinWheels: [SpinWheel] = []
 
     private let spinWheelTable = Table("SpinWheels")
     private let id = SQLite.Expression<String>("id")
@@ -62,12 +64,15 @@ class SpinWheelsTable {
                     table.column(title)
                     table.column(labels)
                 })
+            Task {
+                await loadSpinWheels()
+            }
         } catch {
             print(error)
         }
     }
 
-    func createSpinWheel(spinWheel: SpinWheel) -> Int64 {
+    func createSpinWheel(spinWheel: SpinWheel) async -> Int64 {
         do {
             let insert = spinWheelTable.insert(
                 self.id <- spinWheel.id,
@@ -75,11 +80,30 @@ class SpinWheelsTable {
                 self.labels <- spinWheel.labelsJson
             )
             let spinWheelId = try self.db.run(insert)
+            await MainActor.run {
+                self.spinWheels.append(spinWheel)
+            }
             return spinWheelId
         } catch {
             print(error)
         }
         return 0
+    }
+
+    private func loadSpinWheels() async {
+        var spinWheelList = [SpinWheel]()
+        do {
+            for item in try db.prepare(spinWheelTable) {
+                spinWheelList.append(
+                    SpinWheel(
+                        id: item[id], title: item[title], labels: item[labels]))
+            }
+            await MainActor.run {
+                self.spinWheels = spinWheelList
+            }
+        } catch {
+            print(error)
+        }
     }
 
     func getSpinWheels() async -> [SpinWheel] {

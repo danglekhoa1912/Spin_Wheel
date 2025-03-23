@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeView: View {
     @State var showCreateSpinWheel = false
     @StateObject var vm = HomeViewModel()
+    @ObservedObject private var spinWheelsTable = SpinWheelsTable.shared
+
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(spacing: 30) {
@@ -72,7 +74,7 @@ struct HomeView: View {
                     }
 
                     List {
-                        ForEach(vm.spinWheelList) { item in
+                        ForEach(spinWheelsTable.spinWheels) { item in
                             ZStack {
                                 NavigationLink(
                                     destination: WheelView(spinWheelId: item.id)
@@ -152,8 +154,7 @@ struct HomeView: View {
                     }
                     .listRowSpacing(10)
                     .listStyle(.plain)
-                    .scrollContentBackground(.hidden)
-                    .contentMargins(.all, 0)
+                    .modifier(ListBackgroundModifier())
 
                 }
                 Spacer()
@@ -162,14 +163,15 @@ struct HomeView: View {
                 showCreateSpinWheel = true
             } label: {
                 Image(systemName: "plus")
-                    .fontWeight(.semibold)
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 55, height: 55)
                     .background(
-                        Color.primary.shadow(
-                            .drop(
-                                color: .black.opacity(0.25), radius: 5, x: 10,
-                                y: 10)), in: .circle)
+                        Color.primary,
+                        in: .circle
+                    )
+                    .shadow(
+                        color: .black.opacity(0.25), radius: 5, x: 10, y: 10)
             }
         }
 
@@ -183,17 +185,19 @@ struct HomeView: View {
         .sheet(
             isPresented: $showCreateSpinWheel,
             content: {
-                NewSpinWheelView()
-                    .interactiveDismissDisabled()
-                    .presentationCornerRadius(30)
-                    .presentationBackground(.white)
+                if #available(iOS 17.0, *) {
+                    NewSpinWheelView()
+                        .interactiveDismissDisabled()
+                        .presentationCornerRadius(30)
+                        .presentationBackground(.white)
+                } else {
+                    NewSpinWheelView()
+                        .interactiveDismissDisabled()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                }
             }
         )
-        .onAppear {
-            Task {
-                await vm.loadData()
-            }
-        }
     }
 }
 

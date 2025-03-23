@@ -9,10 +9,10 @@ import SwiftUI
 
 struct NewItemView: View {
     @Environment(\.dismiss) private var dismiss
-    
-    @Binding var item: String;
-    
-    let onConfirm: () -> ()
+
+    @Binding var item: String
+
+    let onConfirm: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -39,9 +39,11 @@ struct NewItemView: View {
                     .padding(.vertical, 12)
                     .padding(.horizontal, 15)
                     .background(
-                        .white.shadow(
-                            .drop(color: .black.opacity(0.25), radius: 2)),
-                        in: .rect(cornerRadius: 10))
+                        Rectangle()
+                            .fill(.white)
+                            .cornerRadius(10)
+                            .shadow(color: .black.opacity(0.25), radius: 2)
+                    )
             }
             .padding(.top, 5)
 
@@ -53,8 +55,14 @@ struct NewItemView: View {
             } label: {
                 Text("Add")
                     .font(.title3)
-                    .fontWeight(.semibold)
-                    .textScale(.secondary)
+                    .ifAvailable(
+                        then: {
+                            $0.fontWeight(.semibold)
+                        },
+                        else: {
+                            $0.font(.system(size: 18, weight: .semibold))
+                        }
+                    )
                     .foregroundStyle(.black)
                     .hSpacing(.center)
                     .padding(.vertical, 12)
