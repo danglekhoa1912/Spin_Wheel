@@ -63,7 +63,8 @@ struct NewSpinWheelView: View {
                             .bold()
                             .frame(width: 80, height: 55)
                             .background(
-                                .thinMaterial, in: .rect(cornerRadius: 12))
+                                .thinMaterial, in: .rect(cornerRadius: 12)
+                            )
                             .environment(\.colorScheme, .light)
 
                     }
@@ -82,9 +83,8 @@ struct NewSpinWheelView: View {
                         }
                         .onDelete(perform: vm.deleteLabel)
                     }
-                    .listStyle(.grouped)
-                    .scrollContentBackground(.hidden)
-                    .contentMargins(.vertical, 0)
+                    .listStyle(.plain)
+                    .modifier(ListBackgroundModifier())
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.gray.opacity(0.2))
@@ -96,13 +96,14 @@ struct NewSpinWheelView: View {
             Spacer(minLength: 0)
 
             Button {
-                vm.createSpinWheel()
+                Task {
+                    await vm.createSpinWheel()
+                }
                 dismiss()
             } label: {
                 Text("Create Spin")
+                    .font(.system(size: 20, weight: .semibold))
                     .font(.title3)
-                    .fontWeight(.semibold)
-                    .textScale(.secondary)
                     .foregroundStyle(.black)
                     .hSpacing(.center)
                     .padding(.vertical, 12)

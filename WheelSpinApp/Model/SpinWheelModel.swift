@@ -30,8 +30,8 @@ class SpinWheelModel: ObservableObject {
         labels.remove(atOffsets: offset)
     }
 
-    func createSpinWheel() {
-        let result = SpinWheelsTable.shared.createSpinWheel(
+    func createSpinWheel() async {
+        let result = await SpinWheelsTable.shared.createSpinWheel(
             spinWheel: SpinWheel(title: title, labels: labels.map({ $0.value })))
         print(result)
     }

@@ -9,9 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationStack {
-            HomeView()
+        if #available(iOS 16.0, *) {
+            NavigationStack {
+                HomeView()
+            }
+        } else {
+            NavigationView {
+                HomeView()
+            }
         }
+        
     }
 }
 
