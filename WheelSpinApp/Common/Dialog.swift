@@ -86,8 +86,7 @@ struct Dialog: View {
                             close()
                         } label: {
                             Image(systemName: "xmark")
-                                .font(.title2)
-                                .fontWeight(.medium)
+                                .font(.system(size: 22, weight: .medium))
                         }
                         .tint(.black)
                     }
