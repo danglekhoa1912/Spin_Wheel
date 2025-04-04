@@ -5,23 +5,38 @@
 //  Created by Dang Khoa Dang Le on 26/01/2025.
 //
 
+import CoreImage
+import CoreImage.CIFilterBuiltins
 import SwiftUI
 import Vortex
 
 struct WheelView: View {
     @State var radius: CGFloat = 0.0
     @State private var addNewItem: Bool = false
+    @State var showQRCode = false
+    @State var itemEdit: SpinWheel? = nil
     @StateObject var vm = RouletteViewModel()
+    @StateObject var homeViewModel = HomeViewModel()
     @Environment(\.dismiss) private var dismiss
     @State var spinWheel: SpinWheel? = nil
+    @State var shareCode: String? = nil
+    @ObservedObject private var spinWheelsTable = SpinWheelsTable.shared
+    let notification = NotificationManager.shared
+
     let spinWheelId: String?
+    let context = CIContext()
+    let filter = CIFilter.qrCodeGenerator()
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack {
                 HStack {
                     Button {
-                        dismiss()
+                        if vm.names.count == spinWheel?.labels.count {
+                            dismiss()
+                        } else {
+                            vm.isLabelsChange = true
+                        }
                     } label: {
                         CircleButton(iconName: "chevron.left")
                     }
@@ -30,10 +45,118 @@ struct WheelView: View {
                         .font(.title2)
                         .bold()
                     Spacer()
-                    Button {
+
+                    Menu {
+
+                        Button(action: {
+                            Task {
+                                if let documentID =
+                                    await spinWheelsTable
+                                    .saveToFirestore(
+                                        spinWheel: spinWheel!)
+                                {
+                                    print(
+                                        "✅ Đã lưu lên Firestore với ID: \(documentID)"
+                                    )
+                                    shareCode = documentID
+                                    showQRCode = true
+                                } else {
+                                    print(
+                                        "❌ Không thể lưu lên Firestore"
+                                    )
+                                    return
+                                }
+                            }
+                        }) {
+                            SwiftUI.Label(
+                                "QR",
+                                systemImage:
+                                    "qrcode"
+                            )
+                        }
+
+                        Button(action: {
+                            itemEdit = spinWheel
+                        }) {
+                            SwiftUI.Label(
+                                "Edit",
+                                systemImage:
+                                    "pencil"
+                            )
+                        }
+
+                        Button(action: {
+                            Task {
+                                if let documentID =
+                                    await spinWheelsTable
+                                    .saveToFirestore(
+                                        spinWheel: spinWheel!)
+                                {
+                                    print(
+                                        "✅ Đã lưu lên Firestore với ID: \(documentID)"
+                                    )
+                                    homeViewModel.shareWheel(
+                                        spinWheel: spinWheel!,
+                                        documentId:
+                                            documentID)
+                                } else {
+                                    print(
+                                        "❌ Không thể lưu lên Firestore"
+                                    )
+                                    return
+                                }
+                            }
+                        }) {
+                            SwiftUI.Label(
+                                "Share",
+                                systemImage:
+                                    "arrowshape.turn.up.right.fill"
+                            )
+                        }
+
+                        Button(
+                            role: .destructive,
+                            action: {
+                                Task {
+                                    if await spinWheelsTable
+                                        .deleteSpinWheel(
+                                            id: spinWheel!.id)
+                                    {
+                                        dismiss()
+                                        notification
+                                            .showNotification(
+                                                title:
+                                                    "Deleted wheel successfully",
+                                                isError:
+                                                    false)
+                                    } else {
+                                        notification
+                                            .showNotification(
+                                                title:
+                                                    "Deleting wheel failed",
+                                                isError:
+                                                    true)
+                                    }
+
+                                }
+                            }
+                        ) {
+                            SwiftUI.Label(
+                                "Delete",
+                                systemImage: "trash")
+                        }
 
                     } label: {
-                        CircleButton(iconName: "gearshape")
+                        Image(
+                            systemName:
+                                "ellipsis"
+                        )
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .tint(.black)
+                        .rotationEffect(.degrees(90))
+                        .padding(20)
                     }
                 }
 
@@ -183,10 +306,34 @@ struct WheelView: View {
                 startPoint: .bottomLeading, endPoint: .topTrailing)
         )
         .overlay {
+            Dialog(
+                isPresented: $vm.isLabelsChange, title: "Confirm Exit!",
+                message: {
+                    AnyView(
+                        Text(
+                            "Do you want to save the changes to the item list?")
+                    )
+                },
+                primaryButtonTitle: "No",
+                primaryButtunAction: {
+                    dismiss()
+                },
+                secondaryButtonTitle: "Save",
+                secondaryButtunAction: {
+                    if vm.updateLabelsById(spinWheel: spinWheel!) {
+                        dismiss()
+                    }
+                })
+        }
+        .overlay {
             if vm.showAlert {
                 Dialog(
                     isPresented: $vm.showAlert, title: "We have Winner!",
-                    message: "The winner is \(vm.winningName)",
+                    message: {
+                        AnyView(
+                            Text("The winner is \(vm.winningName)")
+                        )
+                    },
                     primaryButtonTitle: "Cancel", primaryButtunAction: {},
                     secondaryButtonTitle: "Remove",
                     secondaryButtunAction: vm.deleteItemWinner)
@@ -208,6 +355,20 @@ struct WheelView: View {
                     }
                 }
             }
+            if showQRCode {
+                Dialog(
+                    isPresented: $showQRCode, title: "QR Code",
+                    message: {
+                        AnyView(
+                            Image(
+                                uiImage: generateQRCode(from: "\(shareCode!)")
+                            )
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 200, height: 200)
+                        )
+                    }, primaryButtonTitle: "Close", primaryButtunAction: {})
+            }
         }
         .sheet(
             isPresented: $addNewItem
@@ -225,6 +386,34 @@ struct WheelView: View {
             } else {
                 newItemView
             }
+        }
+        .sheet(
+            item: $itemEdit,
+            onDismiss: {
+                Task {
+                    spinWheel = await spinWheelsTable.getSpinWheelDetail(
+                        id: spinWheel!.id)
+                    if spinWheel != nil {
+                        vm.removeAndAddItems(items: spinWheel!.labels)
+                    }
+                }
+            },
+            content: { item in
+                if #available(iOS 17.0, *) {
+                    NewSpinWheelView(spinWheelItem: item)
+                        .interactiveDismissDisabled()
+                        .presentationCornerRadius(30)
+                        .presentationBackground(.white)
+                } else {
+                    NewSpinWheelView(spinWheelItem: item)
+                        .interactiveDismissDisabled()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                }
+            }
+        )
+        .sheet(isPresented: $homeViewModel.showingShareSheet) {
+            ActivityViewController(items: homeViewModel.shareItems)
         }
         .onAppear {
             Task {
@@ -246,6 +435,34 @@ struct WheelView: View {
     func textAngleForSegment(_ index: Int) -> Angle {
         let segmentAngle = 360.0 / Double(vm.names.count)
         return Angle(degrees: -Double(index) * segmentAngle - segmentAngle / 2)
+    }
+
+    func generateQRCode(from string: String) -> UIImage {
+        filter.message = Data(string.utf8)
+
+        if let outputImage = filter.outputImage {
+            if let cgimg = context.createCGImage(
+                outputImage, from: outputImage.extent)
+            {
+                return UIImage(cgImage: cgimg)
+            }
+        }
+        return UIImage(systemName: "xmark.circle") ?? UIImage()
+    }
+    
+    struct ActivityViewController: UIViewControllerRepresentable {
+        let items: [Any]
+
+        func makeUIViewController(context: Context) -> UIActivityViewController
+        {
+            let controller = UIActivityViewController(
+                activityItems: items, applicationActivities: nil)
+            return controller
+        }
+
+        func updateUIViewController(
+            _ uiViewController: UIActivityViewController, context: Context
+        ) {}
     }
 }
 

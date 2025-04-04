@@ -22,6 +22,7 @@ class RouletteViewModel: ObservableObject {
     @Published var winningColor: [String] = []
     @Published var newColorName: String = ""
     @Published var isVisibleFireworks = false
+    @Published var isLabelsChange = false
 
     var selectedColor: Color = .blue
     var lastUsedColor: Color = .clear
@@ -32,6 +33,7 @@ class RouletteViewModel: ObservableObject {
     var totalDurations: Double = 3500
 
     private var player: AVAudioPlayer?
+    @ObservedObject private var spinWheelsTable = SpinWheelsTable.shared
 
     func spinRoulette() {
         guard !isSpinning && !names[0].isEmpty else { return }
@@ -56,7 +58,6 @@ class RouletteViewModel: ObservableObject {
                 Double(restOfRotationInteger) == restOfRotation
                 ? restOfRotationInteger : restOfRotationInteger + 1
             this.winningColor = this.names.reversed()
-            print("winningColor", this.winningColor)
             this.winningName = this.winningColor[winningIndex - 1]
             this.showAlert = true
             this.isVisibleFireworks = true
@@ -69,6 +70,17 @@ class RouletteViewModel: ObservableObject {
         guard !items.isEmpty else { return }
         names.removeAll(where: { $0 == "" })
         colors.removeAll(where: { $0 == .gray.opacity(0.3) })
+        for item in items {
+            addNewColorAndName(name: item)
+        }
+        segmentCount = names.count
+    }
+
+    func removeAndAddItems(items: [String]) {
+        guard !items.isEmpty else { return }
+        names.removeAll()
+        colors.removeAll()
+        usedColors.removeAll()
         for item in items {
             addNewColorAndName(name: item)
         }
@@ -113,7 +125,6 @@ class RouletteViewModel: ObservableObject {
                 !usedColors.contains($0)
             }
             if let randomColor = unusedColors.randomElement() {
-                print(randomColor)
                 colors.append(randomColor)
                 usedColors.append(randomColor)
                 lastUsedColor = randomColor
@@ -148,5 +159,12 @@ class RouletteViewModel: ObservableObject {
             print("Failed to load the sound: \(error)")
         }
         player?.play()
+    }
+
+    func updateLabelsById(spinWheel: SpinWheel) -> Bool {
+        return spinWheelsTable.updateSpinWheel(
+            spinWheel: SpinWheel(
+                id: spinWheel.id, shareCode: "", title: spinWheel.title, labels: names,
+                isUploadToServer: false)) != nil
     }
 }

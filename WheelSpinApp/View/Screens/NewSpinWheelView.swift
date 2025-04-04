@@ -10,7 +10,21 @@ import SwiftUI
 struct NewSpinWheelView: View {
 
     @Environment(\.dismiss) private var dismiss
-    @StateObject var vm = SpinWheelModel()
+    @StateObject private var vm: SpinWheelModel
+    var spinWheelItem: SpinWheel?
+
+    init(spinWheelItem: SpinWheel? = nil) {
+        let model = SpinWheelModel()
+        self.spinWheelItem = spinWheelItem
+        if let item = spinWheelItem {
+            model.title = item.title
+            model.id = item.id
+            for label in item.labels {
+                model.labels.append(Label(value: label))
+            }
+        }
+        self._vm = StateObject(wrappedValue: model)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -97,11 +111,15 @@ struct NewSpinWheelView: View {
 
             Button {
                 Task {
-                    await vm.createSpinWheel()
+                    if spinWheelItem != nil {
+                        await vm.updateSpinWheel()
+                    } else {
+                        await vm.createSpinWheel()
+                    }
                 }
                 dismiss()
             } label: {
-                Text("Create Spin")
+                Text("\(spinWheelItem != nil ? "Edit" : "Create") Spin")
                     .font(.system(size: 20, weight: .semibold))
                     .font(.title3)
                     .foregroundStyle(.black)

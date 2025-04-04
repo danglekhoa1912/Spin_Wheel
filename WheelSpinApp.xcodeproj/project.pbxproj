@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		8416536E2D4A4D1D00F1C2B2 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 8416536D2D4A4D1D00F1C2B2 /* SQLite */; };
+		84B158222D91AD1E00F4B601 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 84B158212D91AD1E00F4B601 /* FirebaseAnalytics */; };
+		84B158242D91AD1E00F4B601 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84B158232D91AD1E00F4B601 /* FirebaseCore */; };
+		84B158262D91AD1E00F4B601 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 84B158252D91AD1E00F4B601 /* FirebaseCrashlytics */; };
+		84B158282D91AD1E00F4B601 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 84B158272D91AD1E00F4B601 /* FirebaseDatabase */; };
+		84B1582A2D91AD1E00F4B601 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 84B158292D91AD1E00F4B601 /* FirebaseFirestore */; };
 		84CA4B332D46A8E600ADC834 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 84CA4B322D46A8E600ADC834 /* Vortex */; };
 /* End PBXBuildFile section */
 
@@ -41,8 +46,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84B158282D91AD1E00F4B601 /* FirebaseDatabase in Frameworks */,
 				8416536E2D4A4D1D00F1C2B2 /* SQLite in Frameworks */,
 				84CA4B332D46A8E600ADC834 /* Vortex in Frameworks */,
+				84B158262D91AD1E00F4B601 /* FirebaseCrashlytics in Frameworks */,
+				84B158242D91AD1E00F4B601 /* FirebaseCore in Frameworks */,
+				84B158222D91AD1E00F4B601 /* FirebaseAnalytics in Frameworks */,
+				84B1582A2D91AD1E00F4B601 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +97,11 @@
 			packageProductDependencies = (
 				84CA4B322D46A8E600ADC834 /* Vortex */,
 				8416536D2D4A4D1D00F1C2B2 /* SQLite */,
+				84B158212D91AD1E00F4B601 /* FirebaseAnalytics */,
+				84B158232D91AD1E00F4B601 /* FirebaseCore */,
+				84B158252D91AD1E00F4B601 /* FirebaseCrashlytics */,
+				84B158272D91AD1E00F4B601 /* FirebaseDatabase */,
+				84B158292D91AD1E00F4B601 /* FirebaseFirestore */,
 			);
 			productName = WheelSpinApp;
 			productReference = 84CA4B0D2D4632EB00ADC834 /* WheelSpinApp.app */;
@@ -119,6 +134,7 @@
 			packageReferences = (
 				84CA4B312D46A8E600ADC834 /* XCRemoteSwiftPackageReference "Vortex" */,
 				8416536C2D4A4D1D00F1C2B2 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 84CA4B0E2D4632EB00ADC834 /* Products */;
@@ -277,17 +293,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WheelSpinApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FQ4L47BZFJ;
+				DEVELOPMENT_TEAM = FQ4L47BZFJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WheelSpinApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Spin Wheel";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Spin Wheel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -303,7 +317,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = khoadang.WheelSpinApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore khoadang.WheelSpinApp";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -321,17 +334,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WheelSpinApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FQ4L47BZFJ;
+				DEVELOPMENT_TEAM = FQ4L47BZFJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WheelSpinApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Spin Wheel";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Spin Wheel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -347,7 +358,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = khoadang.WheelSpinApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore khoadang.WheelSpinApp";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -390,6 +400,14 @@
 				minimumVersion = 0.15.3;
 			};
 		};
+		84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.10.0;
+			};
+		};
 		84CA4B312D46A8E600ADC834 /* XCRemoteSwiftPackageReference "Vortex" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twostraws/Vortex";
@@ -405,6 +423,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8416536C2D4A4D1D00F1C2B2 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
 			productName = SQLite;
+		};
+		84B158212D91AD1E00F4B601 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		84B158232D91AD1E00F4B601 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		84B158252D91AD1E00F4B601 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		84B158272D91AD1E00F4B601 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		84B158292D91AD1E00F4B601 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84B1581E2D91AC9600F4B601 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		84CA4B322D46A8E600ADC834 /* Vortex */ = {
 			isa = XCSwiftPackageProductDependency;
